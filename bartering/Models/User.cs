@@ -1,11 +1,14 @@
-﻿namespace bartering.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace bartering.Models
 {
-    public class User
+    public class User : IdentityUser
     {
-        string Name { get; set; }
-        string Email { get; set; }
-        string Password { get; set; }
-        DateOnly DateOfBirth { get; set; }
-         
+       public string Name { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public DateOnly DateOfBirth { get; set; }
+
+
     }
 }
