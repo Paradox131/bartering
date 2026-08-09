@@ -2,6 +2,7 @@
 using bartering.Models;
 using bartering.Models.ViewModels;
 using static bartering.Models.Enum;
+using Microsoft.EntityFrameworkCore;
 
 namespace bartering.Services
 {
