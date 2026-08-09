@@ -1,0 +1,107 @@
+@model IEnumerable<bartering.Models.SwapOffer>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FromUserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FromUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ToUserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ToUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfferedItemId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfferedItem)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RequestedItemId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RequestedItem)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Message)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RespondedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CompletedAt)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.FromUserId)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.FromUser)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.ToUserId)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.ToUser)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.OfferedItemId)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.OfferedItem)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.RequestedItemId)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.RequestedItem)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Message)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.CreatedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.RespondedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.CompletedAt)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
