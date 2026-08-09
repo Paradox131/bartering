@@ -1,4 +1,4 @@
-﻿namespace bartering.Models
+﻿namespace bartering.Models.ViewModels
 {
     public class BrowseViewModel
     {

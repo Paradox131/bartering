@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using static bartering.Models.Enum;
 
-namespace bartering.Models
+namespace bartering.Models.ViewModels
 {
     public class ItemFormViewModel
     {
