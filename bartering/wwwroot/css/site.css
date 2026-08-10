@@ -1,31 +1,57 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+
+    [2 lines collapsed]
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
-}
+        margin-bottom: 80px;
+        background-color: #f4f6f9;
+    }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
-}
+    .hero {
+            background: linear-gradient(135deg, #e8f0fe 0%, #f8f9fa 100%);
+            border: 1px solid #dee2e6;
+        }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
-}
+       .item-card {
+            border: none;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+            .item-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
+            }
+
+        .item-card-img {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .item-card-placeholder {
+            background: #e9ecef;
+            min-height: 200px;
+        }
+
+        .item-detail-img {
+            max-height: 420px;
+            object-fit: cover;
+        }
+
+        .navbar-brand {
+            letter-spacing: -0.02em;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }

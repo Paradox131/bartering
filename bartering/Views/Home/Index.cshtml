@@ -1,8 +1,66 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
+    var recent = ViewBag.RecentItems as IReadOnlyList<bartering.Models.Item> ?? Array.Empty<bartering.Models.Item>();
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="hero text-center py-5 mb-4 rounded-3">
+    <div class="container">
+        <h1 class="display-5 fw-bold">Swap what you have for what you need</h1>
+        <p class="lead text-muted mx-auto" style="max-width: 640px;">
+            BarterMarket is a community marketplace where users trade items directly — no money, just fair swaps.
+        </p>
+        <div class="d-flex gap-2 justify-content-center flex-wrap mt-4">
+            <a asp-controller="Items" asp-action="Index" class="btn btn-primary btn-lg">Browse items</a>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <a asp-controller="Items" asp-action="Create" class="btn btn-outline-primary btn-lg">List an item</a>
+            }
+            else
+            {
+                <a asp-controller="Account" asp-action="Register" class="btn btn-outline-primary btn-lg">Join free</a>
+            }
+        </div>
+    </div>
+</section>
+<section>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4 mb-0">Recently listed</h2>
+        <a asp-controller="Items" asp-action="Index" class="small">View all →</a>
+    </div>
+    @if (recent.Count == 0)
+    {
+        <div class="text-center text-muted py-5 border rounded bg-white">
+            <p class="mb-0">No items yet. Be the first to list something!</p>
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var item in recent)
+            {
+                <partial name="_ItemCard" model="item" />
+            }
+        </div>
+    }
+</section>
+<section class="mt-5">
+    <div class="row g-4 text-center">
+        <div class="col-md-4">
+            <div class="p-4 border rounded bg-white h-100">
+                <h3 class="h5">1. List</h3>
+                <p class="text-muted small mb-0">Post items you are ready to trade with photos and details.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-4 border rounded bg-white h-100">
+                <h3 class="h5">2. Propose</h3>
+                <p class="text-muted small mb-0">Find something you want and offer one of your items in return.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-4 border rounded bg-white h-100">
+                <h3 class="h5">3. Swap</h3>
+                <p class="text-muted small mb-0">Accept offers, meet up or ship, and mark the swap complete.</p>
+            </div>
+        </div>
+    </div>
+</section>

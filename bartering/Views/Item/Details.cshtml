@@ -1,80 +1,57 @@
 @model bartering.Models.Item
-
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model.Title;
+    var isOwner = User.Identity?.IsAuthenticated == true && User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value == Model.OwnerId;
 }
-
-<h1>Details</h1>
-
-<div>
-    <h4>Item</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Condition)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Condition)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageUrl)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.OwnerId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.OwnerId)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Owner)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Owner)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="row g-4">
+    <div class="col-lg-5">
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl" alt="@Model.Title" class="img-fluid rounded shadow-sm w-100 item-detail-img" />
+        }
+        else
+        {
+            <div class="item-detail-img item-card-placeholder rounded d-flex align-items-center justify-content-center">
+                <span class="text-muted">No photo</span>
+            </div>
+        }
+    </div>
+    <div class="col-lg-7">
+        <div class="d-flex flex-wrap gap-2 mb-2">
+            <span class="badge bg-secondary">@Model.Category</span>
+            <span class="badge bg-light text-dark border">@Model.Condition</span>
+            <span class="badge @(Model.Status == bartering.Models.Enum.ItemStatus.Available ? "bg-success" : "bg-warning text-dark")">@Model.Status</span>
+        </div>
+        <h1 class="h2">@Model.Title</h1>
+        <p class="text-muted mb-1">
+            Listed by <strong>@Model.Owner.DisplayName</strong>
+            @if (!string.IsNullOrEmpty(Model.Owner.Location))
+            {
+                <span> · @Model.Owner.Location</span>
+            }
+        </p>
+        <p class="mt-3">@Model.Description</p>
+        <div class="d-flex flex-wrap gap-2 mt-4">
+            @if (isOwner)
+            {
+                @if (Model.Status == bartering.Models.Enum.ItemStatus.Available)
+                {
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline" onsubmit="return confirm('Delete this listing?');">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-outline-danger">Delete</button>
+                    </form>
+                }
+                <a asp-action="Mine" class="btn btn-link">← My listings</a>
+            }
+            else if (User.Identity?.IsAuthenticated == true && Model.Status == bartering.Models.Enum.ItemStatus.Available)
+            {
+                <a asp-controller="Swaps" asp-action="Create" asp-route-itemId="@Model.Id" class="btn btn-primary btn-lg">Propose a swap</a>
+            }
+            else if (User.Identity?.IsAuthenticated != true)
+            {
+                <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Context.Request.Path" class="btn btn-primary">Log in to propose a swap</a>
+            }
+        </div>
+    </div>
 </div>

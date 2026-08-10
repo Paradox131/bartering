@@ -1,102 +1,33 @@
-@model bartering.Models.SwapOffer
-
+@model bartering.Models.ViewModels.SwapProposalViewModel
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Propose swap";
 }
-
-<h1>Create</h1>
-
-<h4>SwapOffer</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="form-group">
-                <label asp-for="FromUserId" class="control-label"></label>
-                <input asp-for="FromUserId" class="form-control" />
-                <span asp-validation-for="FromUserId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="FromUser" class="control-label"></label>
-                <input asp-for="FromUser" class="form-control" />
-                <span asp-validation-for="FromUser" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ToUserId" class="control-label"></label>
-                <input asp-for="ToUserId" class="form-control" />
-                <span asp-validation-for="ToUserId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ToUser" class="control-label"></label>
-                <input asp-for="ToUser" class="form-control" />
-                <span asp-validation-for="ToUser" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="OfferedItemId" class="control-label"></label>
-                <input asp-for="OfferedItemId" class="form-control" />
-                <span asp-validation-for="OfferedItemId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="OfferedItem" class="control-label"></label>
-                <input asp-for="OfferedItem" class="form-control" />
-                <span asp-validation-for="OfferedItem" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="RequestedItemId" class="control-label"></label>
-                <input asp-for="RequestedItemId" class="form-control" />
-                <span asp-validation-for="RequestedItemId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="RequestedItem" class="control-label"></label>
-                <input asp-for="RequestedItem" class="form-control" />
-                <span asp-validation-for="RequestedItem" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Message" class="control-label"></label>
-                <input asp-for="Message" class="form-control" />
-                <span asp-validation-for="Message" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="RespondedAt" class="control-label"></label>
-                <input asp-for="RespondedAt" class="form-control" />
-                <span asp-validation-for="RespondedAt" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="CompletedAt" class="control-label"></label>
-                <input asp-for="CompletedAt" class="form-control" />
-                <span asp-validation-for="CompletedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+<h1 class="h3 mb-2">Propose a swap</h1>
+<p class="text-muted mb-4">
+    You want <strong>@Model.RequestedItemTitle</strong> from @Model.RequestedItemOwner.
+    Pick one of your available items to offer in return.
+</p>
+<form asp-action="Create" method="post" class="col-lg-7">
+    <input type="hidden" asp-for="RequestedItemId" />
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <div class="mb-3">
+        <label asp-for="OfferedItemId" class="form-label"></label>
+        <select asp-for="OfferedItemId" class="form-select">
+            <option value="">— Select your item —</option>
+            @foreach (var item in Model.MyAvailableItems)
+            {
+                <option value="@item.Id">@item.Title (@item.Category)</option>
+            }
+        </select>
+        <span asp-validation-for="OfferedItemId" class="text-danger"></span>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="mb-3">
+        <label asp-for="Message" class="form-label"></label>
+        <textarea asp-for="Message" class="form-control" rows="3" placeholder="Optional note to the owner…"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Send swap offer</button>
+    <a asp-controller="Items" asp-action="Details" asp-route-id="@Model.RequestedItemId" class="btn btn-link">Cancel</a>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

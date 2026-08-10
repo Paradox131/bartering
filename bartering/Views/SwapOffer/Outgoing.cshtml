@@ -1,0 +1,14 @@
+﻿@model IReadOnlyList<bartering.Models.SwapOffer>
+@{
+    ViewData["Title"] = "Outgoing offers";
+}
+<h1 class="h3 mb-4">Outgoing swap offers</h1>
+@if (Model.Count == 0)
+{
+    <div class="text-muted py-4">You have not sent any offers yet.</div>
+}
+else
+{
+    <partial name="_SwapOfferList" model="Model" />
+}
+

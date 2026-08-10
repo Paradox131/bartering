@@ -1,0 +1,43 @@
+﻿@model bartering.Models.ViewModels.ItemFormViewModel
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+<div class="mb-3">
+    <label asp-for="Title" class="form-label"></label>
+    <input asp-for="Title" class="form-control" />
+    <span asp-validation-for="Title" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="Description" class="form-label"></label>
+    <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+    <span asp-validation-for="Description" class="text-danger"></span>
+</div>
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="Category" class="form-label"></label>
+        <input asp-for="Category" class="form-control" list="categorySuggestions" placeholder="e.g. Electronics" />
+        <datalist id="categorySuggestions">
+            <option value="Electronics" />
+            <option value="Books" />
+            <option value="Clothing" />
+            <option value="Home & Garden" />
+            <option value="Sports" />
+            <option value="Toys & Games" />
+            <option value="Other" />
+        </datalist>
+        <span asp-validation-for="Category" class="text-danger"></span>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="Condition" class="form-label"></label>
+        <select asp-for="Condition" class="form-select" asp-items="Html.GetEnumSelectList<bartering.Models.Enum.ItemCondition>()"></select>
+    </div>
+</div>
+<div class="mb-3">
+    <label asp-for="Image" class="form-label"></label>
+    @if (!string.IsNullOrEmpty(Model.ExistingImageUrl))
+    {
+        <div class="mb-2">
+            <img src="@Model.ExistingImageUrl" alt="Current" class="rounded" style="max-height:120px" />
+            <p class="small text-muted mb-0">Upload a new photo to replace it.</p>
+        </div>
+    }
+    <input asp-for="Image" type="file" accept="image/*" class="form-control" />
+</div>

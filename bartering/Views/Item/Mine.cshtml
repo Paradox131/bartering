@@ -1,0 +1,53 @@
+﻿@model IReadOnlyList<bartering.Models.Item>
+@{
+    ViewData["Title"] = "My listings";
+}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">My listings</h1>
+    <a asp-action="Create" class="btn btn-primary">+ List item</a>
+</div>
+@if (Model.Count == 0)
+{
+    <div class="text-center text-muted py-5 border rounded bg-white">
+        <p>You have not listed any items yet.</p>
+        <a asp-action="Create" class="btn btn-primary">List your first item</a>
+    </div>
+}
+else
+{
+    <div class="table-responsive bg-white border rounded">
+        <table class="table table-hover mb-0 align-middle">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Listed</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                {
+                                    <img src="@item.ImageUrl" alt="" class="rounded" style="width:48px;height:48px;object-fit:cover" />
+                                }
+                                <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
+                            </div>
+                        </td>
+                        <td>@item.Category</td>
+                        <td><span class="badge bg-light text-dark border">@item.Status</span></td>
+                        <td class="text-muted small">@item.CreatedAt.ToLocalTime().ToString("MMM d, yyyy")</td>
+                        <td class="text-end">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">View</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
