@@ -10,6 +10,8 @@ namespace bartering.Data
             : base(options)
         {
         }
+
+        public DbSet<Donation> Donations { get; set; }
         public DbSet<Item> Items => Set<Item>();
         public DbSet<SwapOffer> SwapOffers => Set<SwapOffer>();
         protected override void OnModelCreating(ModelBuilder builder)
