@@ -1,0 +1,57 @@
+﻿@model bartering.Models.Donation
+@{
+    ViewData["Title"] = "Thank You";
+}
+
+<div class="confirmation-page">
+
+    <div class="confirmation-card">
+
+        <div class="confirmation-icon">
+            ✓
+        </div>
+
+        <h1>Thank You!</h1>
+
+        <p class="confirmation-message">
+            Thank you for your generous donation.
+            Your support can help make a real difference.
+        </p>
+
+        <div class="donation-summary">
+
+            <div class="summary-row">
+                <strong>Donation Amount:</strong>
+
+                <span>
+                    €@Model.Amount.ToString("N2")
+                </span>
+            </div>
+
+            <div class="summary-row">
+                <strong>Donor:</strong>
+
+                <span>
+                    @(Model.IsAnonymous ? "Anonymous" : Model.DonorName)
+                </span>
+            </div>
+
+            <div class="summary-row">
+                <strong>Date:</strong>
+
+                <span>
+                    @Model.DonationDate.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
+                </span>
+            </div>
+
+        </div>
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="btn btn-primary">
+            Return to Homepage
+        </a>
+
+    </div>
+
+</div>
