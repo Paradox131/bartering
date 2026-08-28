@@ -76,7 +76,8 @@ public class ItemsController : Controller
             return View(viewModel);
         }
 
-        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        var userId = User.FindFirst(
+            System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
         if (string.IsNullOrEmpty(userId))
         {
@@ -94,34 +95,34 @@ public class ItemsController : Controller
             Status = ItemStatus.Available
         };
 
+        // Save uploaded image
+        if (viewModel.Image != null && viewModel.Image.Length > 0)
+        {
+            var uploadsFolder = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot",
+                "uploads",
+                "items");
+
+            Directory.CreateDirectory(uploadsFolder);
+
+            var fileName = Guid.NewGuid().ToString() +
+                           Path.GetExtension(viewModel.Image.FileName);
+
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await viewModel.Image.CopyToAsync(fileStream);
+            }
+
+            item.ImageUrl = "/uploads/items/" + fileName;
+        }
+
         _context.Items.Add(item);
         await _context.SaveChangesAsync();
 
         return RedirectToAction(nameof(Index));
-    }
-
-    // GET: ITEMS/Edit/5
-    [HttpGet]
-    public async Task<IActionResult> Edit(int id)
-    {
-        var item = await _context.Items.FindAsync(id);
-
-        if (item == null)
-        {
-            return NotFound();
-        }
-
-        var viewModel = new ItemFormViewModel
-        {
-            Id = item.Id,
-            Title = item.Title,
-            Description = item.Description,
-            Category = item.Category,
-            Condition = item.Condition,
-            ExistingImageUrl = item.ImageUrl
-        };
-
-        return View(viewModel);  
     }
 
     //public async Task<IActionResult> Edit(int? id)

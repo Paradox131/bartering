@@ -4,7 +4,7 @@
     ViewData["Title"] = "List an item";
 }
 <h1 class="h3 mb-4">List an item for swap</h1>
-<form asp-action="Create" method="post">
+<form asp-action="Create" method="post" enctype="multipart/form-data">
 
     <partial name="_ItemFormFields" model="Model" />
 

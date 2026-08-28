@@ -3,7 +3,10 @@
     <div class="card item-card h-100 shadow-sm">
         @if (!string.IsNullOrEmpty(Model.ImageUrl))
         {
-            <img src="@Model.ImageUrl" class="card-img-top item-card-img" alt="@Model.Title" />
+            <img src="@Model.ImageUrl"
+                 alt="@Model.Title"
+                 class="card-img-top"
+                 style="height: 200px; object-fit: cover;" />
         }
         else
         {
