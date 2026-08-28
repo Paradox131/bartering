@@ -1,8 +1,9 @@
 
+using bartering.Data;
+using bartering.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using bartering.Models;
-using bartering.Data;
+using static bartering.Models.Enum;
 
 public class SwapsController : Controller
 {
@@ -38,26 +39,89 @@ public class SwapsController : Controller
     }
 
     // GET: SWAPOFFERS/Create
-    public IActionResult Create()
+    public async Task<IActionResult> Create(int requestedItemId)
     {
-        return View();
+        var requestedItem = await _context.Items
+            .Include(i => i.Owner)
+            .FirstOrDefaultAsync(i => i.Id == requestedItemId);
+
+        if (requestedItem == null)
+        {
+            return NotFound();
+        }
+
+        var swapOffer = new SwapOffer
+        {
+            RequestedItemId = requestedItem.Id,
+            ToUserId = requestedItem.OwnerId
+        };
+
+        return View(swapOffer);
     }
+
+
+
+    //public IActionResult Create()
+    //{
+    //     return View();
+    //}
 
     // POST: SWAPOFFERS/Create
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,FromUserId,FromUser,ToUserId,ToUser,OfferedItemId,OfferedItem,RequestedItemId,RequestedItem,Status,Message,CreatedAt,RespondedAt,CompletedAt")] SwapOffer swapoffer)
+    public async Task<IActionResult> Create(SwapOffer swapoffer)
     {
-        if (ModelState.IsValid)
+        var fromUserId = User.FindFirst(
+            System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(fromUserId))
         {
-            _context.Add(swapoffer);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Unauthorized();
         }
-        return View(swapoffer);
+
+        var requestedItem = await _context.Items
+            .Include(i => i.Owner)
+            .FirstOrDefaultAsync(i => i.Id == swapoffer.RequestedItemId);
+
+        if (requestedItem == null)
+        {
+            return NotFound();
+        }
+
+        if (requestedItem.OwnerId == fromUserId)
+        {
+            ModelState.AddModelError("", "You cannot propose a swap for your own item.");
+            return View(swapoffer);
+        }
+
+        swapoffer.FromUserId = fromUserId;
+        swapoffer.ToUserId = requestedItem.OwnerId;
+        swapoffer.Status = SwapOfferStatus.Pending;
+        swapoffer.CreatedAt = DateTime.UtcNow;
+
+        if (!ModelState.IsValid)
+        {
+            return View(swapoffer);
+        }
+
+        _context.SwapOffers.Add(swapoffer);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
     }
+
+    //public async Task<IActionResult> Create([Bind("Id,FromUserId,FromUser,ToUserId,ToUser,OfferedItemId,OfferedItem,RequestedItemId,RequestedItem,Status,Message,CreatedAt,RespondedAt,CompletedAt")] SwapOffer swapoffer)
+    //{
+    //  if (ModelState.IsValid)
+    //{
+    //  _context.Add(swapoffer);
+    //await _context.SaveChangesAsync();
+    //return RedirectToAction(nameof(Index));
+    //}
+    //return View(swapoffer);
+    // }
 
     // GET: SWAPOFFERS/Edit/5
     public async Task<IActionResult> Edit(int? id)
