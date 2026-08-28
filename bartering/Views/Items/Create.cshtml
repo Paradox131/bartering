@@ -1,0 +1,21 @@
+@model bartering.Models.ViewModels.ItemFormViewModel
+
+@{
+    ViewData["Title"] = "List an item";
+}
+<h1 class="h3 mb-4">List an item for swap</h1>
+<form asp-action="Create" method="post">
+
+    <partial name="_ItemFormFields" model="Model" />
+
+    <button type="submit" class="btn btn-primary">
+        Create
+    </button>
+
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

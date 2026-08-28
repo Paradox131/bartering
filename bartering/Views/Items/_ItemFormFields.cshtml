@@ -1,4 +1,5 @@
 ﻿@model bartering.Models.ViewModels.ItemFormViewModel
+
 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 <div class="mb-3">
     <label asp-for="Title" class="form-label"></label>
@@ -31,13 +32,22 @@
     </div>
 </div>
 <div class="mb-3">
-    <label asp-for="Image" class="form-label"></label>
     @if (!string.IsNullOrEmpty(Model.ExistingImageUrl))
     {
-        <div class="mb-2">
-            <img src="@Model.ExistingImageUrl" alt="Current" class="rounded" style="max-height:120px" />
-            <p class="small text-muted mb-0">Upload a new photo to replace it.</p>
+        <div class="mb-3">
+            <label class="form-label">Current Image</label>
+
+            <br />
+
+            <img src="@Model.ExistingImageUrl"
+                 alt="Current item image"
+                 style="max-width: 250px; max-height: 250px;" />
         </div>
     }
-    <input asp-for="Image" type="file" accept="image/*" class="form-control" />
+
+    <div class="mb-3">
+        <label asp-for="Image" class="form-label"></label>
+        <input asp-for="Image" type="file" class="form-control" />
+        <span asp-validation-for="Image" class="text-danger"></span>
+    </div>
 </div>
