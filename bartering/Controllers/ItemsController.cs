@@ -31,6 +31,24 @@ public class ItemsController : Controller
         return View(viewModel);
     }
 
+    [HttpGet]
+    public async Task<IActionResult> Mine()
+    {
+        var userId = User.FindFirst(
+            System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        var items = await _context.Items
+            .Where(i => i.OwnerId == userId)
+            .OrderByDescending(i => i.CreatedAt)
+            .ToListAsync();
+
+        return View(items);
+    }
 
 
     // GET: ITEMS/Details/5
